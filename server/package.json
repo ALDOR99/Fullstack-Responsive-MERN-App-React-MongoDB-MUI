@@ -25,5 +25,8 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "devDependencies": {
+    "@types/express": "^4.17.21"
+  },
   "description": ""
 }

@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "baseUrl": "src"
+  },
+  "include": ["src"]
+
+  // "compilerOptions" içinde "baseUrl" seçeneği, dosya yollarını belirtirken temel dizin olarak kullanılacak klasörü tanımlar.
+  // "include" içinde belirtilen dosyaların ve klasörlerin projeye dahil edileceklerini belirtir.
+  // "orum satırı": Bu bir yorum satırıdır. Yorumlar, dosyanın anlaşılması ve belgelenmesi için kullanılır.
+}
