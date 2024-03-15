@@ -58,8 +58,8 @@ Eğer projeye katkıda bulunmak istiyorsanız, lütfen şu adımları takip edin
 
 Daha fazla katkıda bulunma bilgisi ekleyebilir veya katkıda bulunma sürecinizi nasıl daha iyi yapabileceğiniz hakkında bilgi verebilirsiniz.
 
-<img src="Ekran Resmi 2024-03-15 18.54.40.png">
-<img src="Ekran Resmi 2024-03-15 18.55.09.png">
-<img src="Ekran Resmi 2024-03-15 18.55.38.png">
-<img src="Ekran Resmi 2024-03-15 18.57.56.png">
-<img src="Ekran Resmi 2024-03-15 18.58.10.png">
+<img src="img/Ekran Resmi 2024-03-15 18.54.40.png">
+<img src="img/Ekran Resmi 2024-03-15 18.55.09.png">
+<img src="img/Ekran Resmi 2024-03-15 18.55.38.png">
+<img src="img/Ekran Resmi 2024-03-15 18.57.56.png">
+<img src="img/Ekran Resmi 2024-03-15 18.58.10.png">
