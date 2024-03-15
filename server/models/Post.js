@@ -1,50 +1,42 @@
-import mongoose from "mongoose";
+import mongoose from "mongoose"; // Mongoose kütüphanesini içeri aktar
 
-// Mongoose şeması tanımlanıyor
+// Post veri şeması tanımlama
 const postSchema = mongoose.Schema(
   {
-    // Kullanıcı ID'si
     userId: {
-      type: String,
-      required: true,
+      // Kullanıcı kimliği alanı
+      type: String, // Veri türü: String
+      required: true, // Zorunlu alan
     },
-    // Kullanıcının adı
     firstName: {
-      type: String,
-      required: true,
+      // Kullanıcının adı alanı
+      type: String, // Veri türü: String
+      required: true, // Zorunlu alan
     },
-    // Kullanıcının soyadı
     lastName: {
-      type: String,
-      required: true,
+      // Kullanıcının soyadı alanı
+      type: String, // Veri türü: String
+      required: true, // Zorunlu alan
     },
-    // Gönderinin konumu
-    location: {
-      type: String,
-      required: true,
-    },
-    // Gönderinin açıklaması
-    description: String,
-    // Gönderinin resim yolu
-    picturePath: String,
-    // Kullanıcının resim yolu
-    userPicturePath: String,
-    // Beğeniler (her kullanıcının ID'sini anahtar olarak içeren bir harita)
+    location: String, // Konum alanı (isteğe bağlı)
+    description: String, // Açıklama alanı (isteğe bağlı)
+    picturePath: String, // Resim dosyası yolu alanı (isteğe bağlı)
+    userPicturePath: String, // Kullanıcı resim dosyası yolu alanı (isteğe bağlı)
     likes: {
-      type: Map,
-      of: Boolean,
+      // Beğeniler alanı
+      type: Map, // Veri türü: Map
+      of: Boolean, // Değerlerin veri türü: Boolean
     },
-    // Yorumlar (bir dizi olarak depolanır)
     comments: {
-      type: Array,
-      default: [],
+      // Yorumlar alanı
+      type: Array, // Veri türü: Array
+      default: [], // Varsayılan değer: boş dizi
     },
   },
-  { timestamps: true } // Zaman damgası ekleniyor
+  { timestamps: true } // Zaman damgası özelliği etkin
 );
 
-// Mongoose modeli oluşturuluyor
+// Post modelini tanımlama
 const Post = mongoose.model("Post", postSchema);
 
-// Post modeli dışa aktarılıyor
-export default Post;
+export default Post; // Post modelini dışa aktarma

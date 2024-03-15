@@ -1,54 +1,54 @@
-import mongoose from "mongoose";
+import mongoose from "mongoose"; // Mongoose kütüphanesini içeri aktar
 
-// Kullanıcı Şeması
+// Kullanıcı şemasını tanımla
 const UserSchema = new mongoose.Schema(
   {
     firstName: {
-      type: String,
-      required: true,
-      min: 2,
-      max: 50,
+      // Kullanıcının adı alanı
+      type: String, // Veri türü: String
+      required: true, // Zorunlu alan
+      min: 2, // Minimum karakter sayısı: 2
+      max: 50, // Maksimum karakter sayısı: 50
     },
     lastName: {
-      type: String,
-      required: true,
-      min: 2,
-      max: 50,
+      // Kullanıcının soyadı alanı
+      type: String, // Veri türü: String
+      required: true, // Zorunlu alan
+      min: 2, // Minimum karakter sayısı: 2
+      max: 50, // Maksimum karakter sayısı: 50
     },
     email: {
-      type: String,
-      required: true,
-      max: 50,
-      unique: true,
+      // Kullanıcının e-posta adresi alanı
+      type: String, // Veri türü: String
+      required: true, // Zorunlu alan
+      max: 50, // Maksimum karakter sayısı: 50
+      unique: true, // E-posta adresi benzersiz olmalı
     },
     password: {
-      type: String,
-      required: true,
-      min: 5,
+      // Kullanıcının şifre alanı
+      type: String, // Veri türü: String
+      required: true, // Zorunlu alan
+      min: 5, // Minimum karakter sayısı: 5
     },
     picturePath: {
-      type: String,
-      default: "",
+      // Kullanıcının resim dosyası yolu alanı
+      type: String, // Veri türü: String
+      default: "", // Varsayılan değer: boş dize
     },
     friends: {
-      type: [String], // Arkadaşlar dizisi olarak tanımlandı
-      default: [],
+      // Kullanıcının arkadaşları alanı
+      type: Array, // Veri türü: Array
+      default: [], // Varsayılan değer: boş dizi
     },
-    location: String,
-    occupation: String,
-    ViewedProfile: {
-      type: Number,
-      default: 0,
-    },
-    impressions: {
-      type: Number,
-      default: 0,
-    },
+    location: String, // Kullanıcının konum alanı (isteğe bağlı)
+    occupation: String, // Kullanıcının meslek alanı (isteğe bağlı)
+    viewedProfile: Number, // Profil görüntülenme sayısı alanı (isteğe bağlı)
+    impressions: Number, // İzlenim sayısı alanı (isteğe bağlı)
   },
-  { timestamps: true }
+  { timestamps: true } // Zaman damgası özelliği etkin
 );
 
-// Kullanıcı Modeli
+// Kullanıcı modelini tanımla
 const User = mongoose.model("User", UserSchema);
 
-export default User;
+export default User; // Kullanıcı modelini dışa aktar

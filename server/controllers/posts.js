@@ -1,18 +1,13 @@
-import Post from "../models/Post.js";
+import Post from "../models/Post.js"; // Post modelini içeri aktar
+import User from "../models/User.js"; // User modelini içeri aktar
 
-//--------------------------------------------------------------
-
-/* READ-OKUMA*/
-
+/* YENİ POST OLUŞTURMA */
 export const createPost = async (req, res) => {
   try {
-    // İstekten gelen bilgiler çıkartılıyor
-    const { userId, description, picturePath } = req.body;
+    const { userId, description, picturePath } = req.body; // İstekten gelen verileri al
+    const user = await User.findById(userId); // Kullanıcıyı veritabanından al
 
-    // Kullanıcı bilgileri veritabanından alınıyor (Örnek: User modeli kullanılarak)
-    const user = await User.findById(userId);
-
-    // Yeni bir Post nesnesi oluşturuluyor
+    // Yeni post nesnesi oluştur
     const newPost = new Post({
       userId,
       firstName: user.firstName,
@@ -21,84 +16,65 @@ export const createPost = async (req, res) => {
       description,
       userPicturePath: user.picturePath,
       picturePath,
-      likes: {},
-      comments: [],
+      likes: {}, // Başlangıçta boş bir beğeni nesnesi oluştur
+      comments: [], // Başlangıçta boş bir yorum dizisi oluştur
     });
 
-    // Yeni gönderi veritabanına kaydediliyor
-    await newPost.save();
+    await newPost.save(); // Yeni postu kaydet
 
-    // Tüm gönderileri al ve isteğe yanıt olarak gönder
-    const posts = await Post.find();
-    res.status(201).json(posts);
+    const post = await Post.find(); // Tüm postları al
+    res.status(201).json(post); // Başarılı yanıtı gönder
   } catch (err) {
-    // Hata durumunda isteğe uygun bir hata mesajı gönder
-    res.status(409).json({ message: err.message });
+    res.status(409).json({ message: err.message }); // Hata durumunda uygun yanıtı gönder
   }
 };
-//--------------------------------------------------------------
 
-/* OKUMA */
-
-// Tüm gönderileri al ve isteğe yanıt olarak gönder
+/* POSTLARI GETİRME */
 export const getFeedPosts = async (req, res) => {
   try {
-    const posts = await Post.find();
-    res.status(200).json(posts);
+    const post = await Post.find(); // Tüm postları al
+    res.status(200).json(post); // Başarılı yanıtı gönder
   } catch (err) {
-    // Hata durumunda uygun bir hata mesajı gönder
-    res.status(404).json({ message: err.message });
+    res.status(404).json({ message: err.message }); // Hata durumunda uygun yanıtı gönder
   }
 };
 
-// Belirli bir kullanıcının gönderilerini al ve isteğe yanıt olarak gönder
 export const getUserPosts = async (req, res) => {
   try {
-    // İstek parametrelerinden kullanıcı ID'sini al
-    const { userId } = req.params;
-
-    // Kullanıcının gönderilerini veritabanından al
-    const posts = await Post.find({ userId });
-
-    // Alınan gönderileri isteğe yanıt olarak gönder
-    res.status(200).json(posts);
+    const { userId } = req.params; // İstekten kullanıcı kimliğini al
+    const post = await Post.find({ userId }); // Belirli bir kullanıcıya ait postları al
+    res.status(200).json(post); // Başarılı yanıtı gönder
   } catch (err) {
-    // Hata durumunda uygun bir hata mesajı gönder
-    res.status(404).json({ message: err.message });
+    res.status(404).json({ message: err.message }); // Hata durumunda uygun yanıtı gönder
   }
 };
 
-/* GÜNCELLEME */
+/* POSTU GÜNCELLEME */
 export const likePost = async (req, res) => {
   try {
-    // İstek parametrelerinden gönderi ID'sini ve gönderiyi beğenen kullanıcının ID'sini al
-    const { id } = req.params;
-    const { userId } = req.body;
+    const { id } = req.params; // İstekten post kimliğini al
+    const { userId } = req.body; // İstekten kullanıcı kimliğini al
+    const post = await Post.findById(id); // Belirli bir postu bul
 
-    // Gönderiyi veritabanından bul
-    const post = await Post.findById(id);
-
-    // Gönderinin beğeni durumunu kontrol et
+    // Kullanıcının bu postu beğenip beğenmediğini kontrol et
     const isLiked = post.likes.get(userId);
 
-    // Beğeni durumuna göre işlem yap
+    // Eğer beğenilmişse, beğeniyi kaldır; aksi halde, beğeni ekle
     if (isLiked) {
-      post.likes.delete(userId); // Beğeni varsa, beğeniyi geri al
+      post.likes.delete(userId);
     } else {
-      post.likes.set(userId, true); // Beğeni yoksa, beğeni ekle
+      post.likes.set(userId, true);
     }
 
-    // Gönderiyi güncelle ve güncellenmiş gönderiyi al
+    // Postu güncelle ve güncellenmiş postu al
     const updatedPost = await Post.findByIdAndUpdate(
       id,
       { likes: post.likes },
       { new: true }
     );
 
-    // Güncellenmiş gönderiyi isteğe yanıt olarak gönder
-    res.status(200).json(updatedPost);
+    res.status(200).json(updatedPost); // Başarılı yanıtı gönder
   } catch (err) {
-    // Hata durumunda uygun bir hata mesajı gönder
-    res.status(404).json({ message: err.message });
+    res.status(404).json({ message: err.message }); // Hata durumunda uygun yanıtı gönder
   }
 };

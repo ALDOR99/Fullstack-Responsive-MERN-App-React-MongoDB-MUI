@@ -1,22 +1,21 @@
-import express from "express";
+import express from "express"; // Express kütüphanesini içeri aktar
 import {
   getUser,
   getUserFriends,
   addRemoveFriend,
-} from "../controllers/users.js";
-import { verifyToken } from "../middleware/auth.js";
+} from "../controllers/users.js"; // Kullanıcıları al ve arkadaş ekle/çıkar işlemlerini içeren denetleyicileri içeri aktar
+import { verifyToken } from "../middleware/auth.js"; // JWT token doğrulama ara katmanını içeri aktar
 
-const router = express.Router();
+const router = express.Router(); // Yönlendirici oluştur
 
-/* OKUMA */
-// Kullanıcıyı almak için endpoint
+/* READ */
+// "/users/:id" yoluna GET isteği geldiğinde, token doğrulamasını sağlayarak kullanıcıyı al
 router.get("/:id", verifyToken, getUser);
-
-// Kullanıcının arkadaşlarını almak için endpoint
+// "/users/:id/friends" yoluna GET isteği geldiğinde, token doğrulamasını sağlayarak kullanıcının arkadaşlarını al
 router.get("/:id/friends", verifyToken, getUserFriends);
 
-/* GÜNCELLEME */
-// Kullanıcının arkadaşlarını eklemek veya çıkarmak için endpoint
+/* UPDATE */
+// "/users/:id/:friendId" yoluna PATCH isteği geldiğinde, token doğrulamasını sağlayarak arkadaş ekle/çıkar
 router.patch("/:id/:friendId", verifyToken, addRemoveFriend);
 
-export default router;
+export default router; // Yönlendiriciyi dışa aktar

@@ -1,87 +1,74 @@
-import User from "../models/User.js";
+import User from "../models/User.js"; // User modelini içeri aktar
 
-/* READ */
-// Kullanıcının belirli bir kimliğe sahip olduğu bir endpoint.
+/* KULLANICI BİLGİSİNİ GETİR */
 export const getUser = async (req, res) => {
   try {
-    const { id } = req.params; // İstekten gelen parametrelerden kullanıcı kimliğini alınır.
-    const user = await User.findById(id); // Kullanıcı kimliği ile veritabanından kullanıcıyı bulma.
-    res.status(200).json(user); // Kullanıcı başarıyla bulunursa istemciye kullanıcı bilgilerini gönderme.
+    const { id } = req.params; // İstekten kullanıcı kimliğini al
+    const user = await User.findById(id); // Belirli bir kullanıcıyı bul
+    res.status(200).json(user); // Başarılı yanıtı gönder
   } catch (err) {
-    res.status(404).json({ message: err.message }); // Hata durumunda istemciye bir hata mesajı gönderme.
+    res.status(404).json({ message: err.message }); // Hata durumunda uygun yanıtı gönder
   }
 };
 
-// Kullanıcının arkadaşlarını getirmek için bir API endpoint'i sağlayan fonksiyon.
+/* KULLANICININ ARKADAŞLARINI GETİR */
 export const getUserFriends = async (req, res) => {
   try {
-    const { id } = req.params; // İstekten gelen parametrelerden kullanıcı kimliğini alınır.
+    const { id } = req.params; // İstekten kullanıcı kimliğini al
+    const user = await User.findById(id); // Belirli bir kullanıcıyı bul
 
-    const user = await User.findById(id); // Kullanıcı kimliği ile veritabanından kullanıcıyı bulma.
-
-    // Kullanıcının arkadaşlarını paralel olarak getirme
+    // Kullanıcının arkadaşlarını al ve bekleyen tüm isteklerin sonuçlanmasını bekleyin
     const friends = await Promise.all(
-      user.friends.map((friendId) => User.findById(friendId))
+      user.friends.map((id) => User.findById(id))
     );
 
-    // Arkadaşları istenilen formatta düzenleme
+    // Arkadaşların formatını düzenle
     const formattedFriends = friends.map(
       ({ _id, firstName, lastName, occupation, location, picturePath }) => {
         return { _id, firstName, lastName, occupation, location, picturePath };
       }
     );
 
-    // Başarılı bir şekilde düzenlenmiş arkadaşları istemciye gönderme
-    res.status(200).json(formattedFriends);
+    res.status(200).json(formattedFriends); // Başarılı yanıtı gönder
   } catch (err) {
-    // Hata durumunda istemciye bir hata mesajı gönderme
-    res.status(404).json({ message: err.message });
+    res.status(404).json({ message: err.message }); // Hata durumunda uygun yanıtı gönder
   }
 };
 
-/* UPDATE */
-
-// Kullanıcının arkadaşını ekleyip çıkaran bir API endpoint'i sağlayan fonksiyon.
+/* ARKADAŞ EKLEME/ÇIKARMA */
 export const addRemoveFriend = async (req, res) => {
   try {
-    // İstekten gelen parametreleri çıkartma
-    const { id, friendId } = req.params;
+    const { id, friendId } = req.params; // İstekten kullanıcı ve arkadaş kimliğini al
+    const user = await User.findById(id); // Kullanıcıyı bul
+    const friend = await User.findById(friendId); // Arkadaşı bul
 
-    // Kullanıcıyı ve arkadaşı veritabanından bulma
-    const user = await User.findById(id);
-    const friend = await User.findById(friendId);
-
-    // Kullanıcının arkadaşı zaten var mı kontrol etme
-    if (user.friends.includes(friend.id)) {
-      // Eğer varsa, arkadaşı listeden çıkar
+    // Eğer arkadaş zaten varsa, arkadaşı listeden çıkar; aksi halde, arkadaşı ekler
+    if (user.friends.includes(friendId)) {
       user.friends = user.friends.filter((id) => id !== friendId);
       friend.friends = friend.friends.filter((id) => id !== id);
     } else {
-      // Eğer yoksa, arkadaşı listeye ekle
       user.friends.push(friendId);
       friend.friends.push(id);
     }
 
-    // Değişiklikleri veritabanına kaydetme
+    // Değişiklikleri kaydet
     await user.save();
     await friend.save();
 
-    // Kullanıcının güncellenmiş arkadaşlarını tekrar çekme
-    const updatedFriends = await Promise.all(
-      user.friends.map((friendId) => User.findById(friendId))
+    // Kullanıcının arkadaşlarını al ve bekleyen tüm isteklerin sonuçlanmasını bekleyin
+    const friends = await Promise.all(
+      user.friends.map((id) => User.findById(id))
     );
 
-    // Arkadaşları istenilen formatta düzenleme
-    const formattedFriends = updatedFriends.map(
+    // Arkadaşların formatını düzenle
+    const formattedFriends = friends.map(
       ({ _id, firstName, lastName, occupation, location, picturePath }) => {
         return { _id, firstName, lastName, occupation, location, picturePath };
       }
     );
 
-    // Başarılı bir şekilde işlem tamamlandı mesajını ve güncellenmiş arkadaşları gönderme
-    res.status(200).json(formattedFriends);
+    res.status(200).json(formattedFriends); // Başarılı yanıtı gönder
   } catch (err) {
-    // Hata durumunda istemciye bir hata mesajı gönderme
-    res.status(404).json({ message: err.message });
+    res.status(404).json({ message: err.message }); // Hata durumunda uygun yanıtı gönder
   }
 };

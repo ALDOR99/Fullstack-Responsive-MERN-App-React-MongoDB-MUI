@@ -1,33 +1,22 @@
-import jwt from "jsonwebtoken";
+import jwt from "jsonwebtoken"; // JSON Web Token kütüphanesini içeri aktar
 
-// Middleware fonksiyonu: Gelen isteğin token'ını doğrular
+// Kullanıcı token'ını doğrulamak için bir ara yazılım fonksiyonu
 export const verifyToken = async (req, res, next) => {
   try {
-    // İsteğin başlıklarından "Authorization" başlığını alır
-    let token = req.header("Authorization");
+    let token = req.header("Authorization"); // İstek başlığından token'ı al
 
-    // Eğer token yoksa, erişim reddedilmiş olarak 403 hatası döndürülür
     if (!token) {
-      return res.status(403).send("Access Denied: Token Missing");
+      return res.status(403).send("Access Denied"); // Eğer token yoksa erişim reddedildi hatası döndür
     }
 
-    // Eğer token "Bearer" ile başlıyorsa, "Bearer" kısmını kaldırır
-    if (token.startsWith("Bearer")) {
-      token = token.slice(7, token.length).trimLeft();
+    if (token.startsWith("Bearer ")) {
+      token = token.slice(7, token.length).trimLeft(); // Eğer token "Bearer " ile başlıyorsa bu kısmı kaldır
     }
 
-    // Token'ı doğrular ve içerisindeki bilgileri çözer
-    const verified = jwt.verify(token, process.env.JWT_SECRET);
-
-    // İstek nesnesine doğrulanan kullanıcı bilgilerini ekler
-    req.user = verified;
-
-    // Bir sonraki middleware veya işlem için kontrolü geçirir
-    next();
+    const verified = jwt.verify(token, process.env.JWT_SECRET); // Token'ı doğrula
+    req.user = verified; // Doğrulanmış kullanıcı bilgisini istek nesnesine ekle
+    next(); // Sonraki ara yazılıma geç
   } catch (err) {
-    // Hata durumunda, 500 (Internal Server Error) hatası döndürülür
-    res
-      .status(500)
-      .json({ error: "Token Verification Failed", details: err.message });
+    res.status(500).json({ error: err.message }); // Herhangi bir hata durumunda 500 hatası döndür
   }
 };
