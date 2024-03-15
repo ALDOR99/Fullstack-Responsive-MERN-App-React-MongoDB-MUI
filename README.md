@@ -6,8 +6,7 @@ Basit bir sosyal medya klonu projesi,amacı react ile fullStact bir proje örene
 
 1. [Proje Hakkında](#Basit bir sosyal medya klonu projesi)
 2. [Kullanılan Teknolojiler](#React, MongoDB, MUI)
-3. [Proje Kurulumu](#git clone https://github.com/ALDOR99/Fullstack-Responsive-MERN-App-React-MongoDB-MUI)
-4. [Katkıda Bulunma](#https://youtu.be/K8YELRmUb5o?si=xA1uAyV6dsjtdYg0)
+3. [KAYNAK](#https://youtu.be/K8YELRmUb5o?si=xA1uAyV6dsjtdYg0)
 
 ## Proje Hakkında
 
